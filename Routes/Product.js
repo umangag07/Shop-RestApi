@@ -1,18 +1,30 @@
 const express = require('express')
 const router = express.Router()
+const Product = require('../models/Product')
 
-router.get('/',(req ,res)=>{
-    res.send("Products page")
+router.get('/', async(req ,res)=>{
+    try{
+        const products = await Product.find()
+        res.send(products)
+    }catch(err){
+        res.send({message:err})
+    }
 })
 
-router.post('/',(req, res)=>{
-    const product={
+router.post('/', async (req, res)=>{
+    console.log(req.body)
+    const product= new Product({
         name: req.body.name,
         price: req.body.price
-    }
-    res.status(200).json({
-        createdProduct:product
-    })
+    });
+    product.save()
+      .then(result=>{
+          res.send(result)
+      })
+      .catch(err=>{
+          res.send({message:err})
+      })
+    
 })
 
 router.get('/:productId',(req, res)=>{
