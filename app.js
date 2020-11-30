@@ -23,6 +23,8 @@ mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedT
     console.log('connected to database')
 })
 
+mongoose.Promise = global.Promise
+
 app.use((req,res,next)=>{
     res.status(200).json({
         message: "It works"

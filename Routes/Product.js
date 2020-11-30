@@ -19,7 +19,15 @@ router.post('/', async (req, res)=>{
     });
     product.save()
       .then(result=>{
-          res.send(result)
+          res.status(200).send({
+            _id:result._id,  
+            name:result.name,
+            price:result.price,
+            request:{
+                type:'GET',
+                url:'http://localhost:3000/products/'+ result._id
+            }
+          })
       })
       .catch(err=>{
           res.send({message:err})
@@ -29,24 +37,44 @@ router.post('/', async (req, res)=>{
 
 router.get('/:productId',(req, res)=>{
     const id = req.params.productId;
-    if(id === 'special'){
-        res.send({message:"Your id is correct",id:id},
-        )
-    }else{
-        res.send({message:"Your id is Incorrect"})
-    }
+    Product.findById(id)
+    .then(result=>{
+        res.send(result)
+    })
+    .catch(err=>{
+        res.send({message:err})
+    })
+  
 })
 
 router.patch('/:productId',(req, res)=>{
     const id = req.params.productId;
-    
-        res.send({message:"updated product",id:id})
+    const update = {}
+    for (const ops of req.body){
+        update[ops.propName] = ops.value;
+    }
+    Product.update({_id:id},{$set:update})
+    .exec()
+    .then(result=>{
+        res.send(result)
+    })
+    .catch(err=>{
+        res.send(err)
+    })
+        
     
 })
 
 router.delete('/:productId',(req, res)=>{
     const id = req.params.productId;
-    res.send({message:"Deleted product",id:id})
+    Product.remove({_id:id})
+    .exec()
+    .then(result=>{
+        res.send(result)
+    })
+    .catch(err=>{
+        res.send(err)
+    })
     
 })
 
