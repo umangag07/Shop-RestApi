@@ -1,16 +1,34 @@
 const express = require('express')
 const router = express.Router()
+const Order = require('../models/Order')
+const mongoose = require('mongoose')
 
-router.get('/',(req ,res)=>{
-    res.send("Orders page")
+router.get('/',async (req ,res)=>{
+    try{
+        const orders = await Order.find()
+        res.send(orders)
+    }catch(err){
+        res.send({message:err})
+    }
 })
 
 router.post('/',(req, res)=>{
-    const order={
-        productId:req.body.productId,
-        quantity:req.body.quantity
-    }
-    res.status(200).json({order:order })
+    const order= new Order({
+      _id: mongoose.Types.ObjectId(),
+      product: req.body.productId,
+      quantity:req.body.quantity,
+      productUrl:"http://localhost:3000/products/"+req.body.productId
+
+    })
+    order.save()
+    .then(result=>{
+        console.log(result)
+        res.send(result)
+    })
+    .catch(err=>{
+        res.send({message:err})
+    })
+    
 })
 
 router.get('/:orderId',(req, res)=>{
