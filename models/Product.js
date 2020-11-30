@@ -8,7 +8,8 @@ const ProductSchema = mongoose.Schema({
           type:Number,
           required:true,
           default:0
-    }
+    },
+    productImage:{type:String}
 })
 
 module.exports = mongoose.model('Products', ProductSchema)

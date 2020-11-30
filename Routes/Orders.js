@@ -5,18 +5,12 @@ const Product = require('../models/Product')
 const mongoose = require('mongoose')
 
 router.get('/',async (req ,res)=>{
-    Order.find()
-    .populate('product')
-    .exec()
-    .then(docs=>{
-        res.send(docs.map(doc=>{
-            return{
-                _id:doc._id,
-                product:doc.product,
-                quantity:doc.quantity
-            }
-        }))
-    })
+    try{
+        const orders = await Order.find()
+        res.send(orders)
+    }catch(err){
+        res.send({message:err})
+    }
 })
 
 router.post('/',(req, res)=>{
@@ -50,7 +44,6 @@ router.post('/',(req, res)=>{
 router.get('/:orderId',(req, res)=>{
     const id = req.params.orderId;
          Order.findById(id)
-         .populate('product')
          .exec()
          .then(result=>{
              if(!result){
