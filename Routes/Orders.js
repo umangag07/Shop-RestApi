@@ -1,56 +1,99 @@
 const express = require('express')
 const router = express.Router()
 const Order = require('../models/Order')
+const Product = require('../models/Product')
 const mongoose = require('mongoose')
 
 router.get('/',async (req ,res)=>{
-    try{
-        const orders = await Order.find()
-        res.send(orders)
-    }catch(err){
-        res.send({message:err})
-    }
+    Order.find()
+    .populate('product')
+    .exec()
+    .then(docs=>{
+        res.send(docs.map(doc=>{
+            return{
+                _id:doc._id,
+                product:doc.product,
+                quantity:doc.quantity
+            }
+        }))
+    })
 })
 
 router.post('/',(req, res)=>{
-    const order= new Order({
-      _id: mongoose.Types.ObjectId(),
-      product: req.body.productId,
-      quantity:req.body.quantity,
-      productUrl:"http://localhost:3000/products/"+req.body.productId
-
-    })
-    order.save()
-    .then(result=>{
-        console.log(result)
-        res.send(result)
+    Product.findById(req.body.productId)
+    .then(product=>{
+        const order= new Order({
+            _id: mongoose.Types.ObjectId(),
+            product: req.body.productId,
+            quantity:req.body.quantity,
+            productUrl:"http://localhost:3000/products/"+req.body.productId
+      
+          })
+          order.save()
+          .then(result=>{
+              console.log(result)
+              res.send(result)
+          })
+          .catch(err=>{
+              res.send({message:err})
+          })
     })
     .catch(err=>{
-        res.send({message:err})
+        res.status(500).json({
+            message:'product not found',
+            error:err
+        })
     })
     
 })
 
 router.get('/:orderId',(req, res)=>{
     const id = req.params.orderId;
-    if(id === 'special'){
-        res.send({message:"Your id is correct",id:id},
-        )
-    }else{
-        res.send({message:"Your id is Incorrect"})
-    }
+         Order.findById(id)
+         .populate('product')
+         .exec()
+         .then(result=>{
+             if(!result){
+                 res.status(404).json({message:"product not found"})
+             }
+             else{
+                res.send(result)
+             }
+             
+         })
+         .catch(err=>{
+             res.send(err)
+         })
+    
 })
 
 router.patch('/:orderId',(req, res)=>{
     const id = req.params.orderId;
-    
-        res.send({message:"updated order",id:id})
+    const orderPatch = {}
+    console.log(req.body)
+    for(const ord of req.body){
+        orderPatch[ord.propName] = ord.value
+    }
+    Order.updateOne({_id:id},{$set:orderPatch})
+    .then(result=>{
+        res.send(result)
+    })
+    .catch(err=>{
+        res.send(err)
+    })
+        
     
 })
 
 router.delete('/:orderId',(req, res)=>{
     const id = req.params.orderId;
-    res.send({message:"Deleted order",id:id})
+    Order.remove({_id:id})
+    .then(result=>{
+        res.send(result)
+    })
+    .catch(err=>{
+        res.send(err)
+    })
     
 })
 
