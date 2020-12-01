@@ -16,10 +16,14 @@ app.use((req,res,next)=>{
     }
     next();
 })
+
 const ProductRoute = require('./Routes/Product');
 app.use('/products',ProductRoute)
 const OrderRoute = require('./Routes/Orders');
 app.use('/orders',OrderRoute)
+const UserRoute = require('./Routes/User')
+app.use('/user',UserRoute)
+
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true  }, ()=>{
     console.log('connected to database')
 })
