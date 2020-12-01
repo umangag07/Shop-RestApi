@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
-router.get('/', async(req ,res)=>{
+router.get('/getMyAllUserJustForME', async(req ,res)=>{
     try{
         const users = await User.find()
         res.send(users)
@@ -53,6 +53,38 @@ router.post("/signup", (req, res) => {
     
 });
 
+router.post('/login',(req,res)=>{
+    User.find({email:req.body.email})
+    .exec()
+    .then(user =>{
+        if(user.length <1){
+            return res.status(401).json({
+                message:"Auth Failed"
+            })
+        }else{
+            bcrypt.compare(req.body.password,user[0].password, (error,response)=>{
+                if(error){
+                    res.status(401).json({
+                        message:"Auth Failed"
+                    })
+                }
+                if(!response){
+                    res.status(401).json({
+                        message:"Auth Failed"
+                    })
+                }else{
+                    res.status(200).json({
+                        message:"Auth success"
+                    })
+                }
+            })
+        }
+
+    })
+    .catch(err=>{
+
+    })
+})
 router.delete('/:userId',(req,res,next)=>{
     User.remove({_id:req.params.userId})
     .exec()
