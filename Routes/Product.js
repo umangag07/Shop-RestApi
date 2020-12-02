@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Product = require('../models/Product')
 const multer = require('multer')
-
+const checkAuth = require('../middleware/check-auth')
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
@@ -32,7 +32,7 @@ router.get('/', async(req ,res)=>{
     }
 })
 
-router.post('/', upload.single('productimage'), async (req, res)=>{
+router.post('/', checkAuth, upload.single('productimage'), async (req, res)=>{
     console.log(req.file)
     const product= new Product({
         name: req.body.name,
