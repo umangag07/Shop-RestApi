@@ -3,8 +3,9 @@ const router = express.Router()
 const Order = require('../models/Order')
 const Product = require('../models/Product')
 const mongoose = require('mongoose')
+const checkAuth = require('../middleware/check-auth')
 
-router.get('/',async (req ,res)=>{
+router.get('/',checkAuth,async (req ,res)=>{
     try{
         const orders = await Order.find()
         res.send(orders)
@@ -13,7 +14,7 @@ router.get('/',async (req ,res)=>{
     }
 })
 
-router.post('/',(req, res)=>{
+router.post('/',checkAuth,(req, res)=>{
     Product.findById(req.body.productId)
     .then(product=>{
         const order= new Order({
@@ -41,7 +42,7 @@ router.post('/',(req, res)=>{
     
 })
 
-router.get('/:orderId',(req, res)=>{
+router.get('/:orderId',checkAuth,(req, res)=>{
     const id = req.params.orderId;
          Order.findById(id)
          .exec()
@@ -60,7 +61,7 @@ router.get('/:orderId',(req, res)=>{
     
 })
 
-router.patch('/:orderId',(req, res)=>{
+router.patch('/:orderId',checkAuth,(req, res)=>{
     const id = req.params.orderId;
     const orderPatch = {}
     console.log(req.body)
@@ -78,7 +79,7 @@ router.patch('/:orderId',(req, res)=>{
     
 })
 
-router.delete('/:orderId',(req, res)=>{
+router.delete('/:orderId',checkAuth,(req, res)=>{
     const id = req.params.orderId;
     Order.remove({_id:id})
     .then(result=>{
