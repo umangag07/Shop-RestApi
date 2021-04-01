@@ -3,6 +3,7 @@ const Product = require('../models/Product')
 exports.get_all_product = async(req ,res)=>{
     try{
         const products = await Product.find()
+        console.log(products)
         res.send(products)
     }catch(err){
         res.send({message:err})
