@@ -6,25 +6,25 @@ const checkAuth = require('../middleware/check-auth')
 const ProductController = require('../controllers/product')
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb){
-       cb(null,'uploads/')
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
     },
-    filename: function(req,file,cb){
-        cb(null,file.originalname)
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
     }
-    
+
 })
-const filefilter = (req, file ,cb)=>{
- 
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg'){
-        cb(null,true)
-    }else{
-        cb(null,false)
+const filefilter = (req, file, cb) => {
+
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+        cb(null, true)
+    } else {
+        cb(null, false)
     }
 }
-const upload =  multer({storage:storage, limits:{fileSize:1024*1024*5}, fileFilter:filefilter});
+const upload = multer({ storage: storage, limits: { fileSize: 1024 * 1024 * 5 }, fileFilter: filefilter });
 
-router.get('/', ProductController.get_all_product );
+router.get('/', ProductController.get_all_product);
 
 router.post('/', checkAuth, upload.single('productimage'), ProductController.create_product)
 
