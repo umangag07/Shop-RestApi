@@ -17,7 +17,7 @@ exports.post_order = (req, res) => {
                 _id: mongoose.Types.ObjectId(),
                 product: req.body.productId,
                 quantity: req.body.quantity,
-                productUrl: "http://localhost:3000/products/" + req.body.productId
+                productUrl: "https://shop-restapi.herokuapp.com/" + req.body.productId
 
             })
             order.save()
