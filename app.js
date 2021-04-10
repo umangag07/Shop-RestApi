@@ -3,9 +3,6 @@ const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 require('dotenv/config')
-const mailer = require('./mailer');
-
-mailer;
 
 
 app.use(bodyParser.json());
