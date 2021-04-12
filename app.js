@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 require('dotenv/config')
+const cron = require("./cronjob");
 
 
 app.use(bodyParser.json());
