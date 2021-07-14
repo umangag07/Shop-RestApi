@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const Product = require('../models/Product')
 const multer = require('multer')
 const checkAuth = require('../middleware/check-auth')
 const ProductController = require('../controllers/product')

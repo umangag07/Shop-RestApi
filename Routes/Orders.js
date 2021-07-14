@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const checkAuth = require('../middleware/check-auth')
 const OrderController = require('../controllers/order')
 
-router.get('/', checkAuth, OrderController.get_all_order)
+router.get('/', OrderController.get_all_order)
 
 router.post('/', checkAuth, OrderController.post_order)
 

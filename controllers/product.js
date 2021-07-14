@@ -2,11 +2,13 @@ const Product = require('../models/Product')
 
 exports.get_all_product = async (req, res) => {
     try {
+        console.log("hello")
         const products = await Product.find()
+        
         console.log(products)
         res.send(products)
     } catch (err) {
-        res.send({ message: err })
+        res.send({ message: err, m:"not working" })
     }
 }
 exports.get_single_product = (req, res) => {
@@ -20,6 +22,7 @@ exports.get_single_product = (req, res) => {
         })
 
 }
+
 exports.create_product = async (req, res) => {
     console.log(req.file)
     const product = new Product({
@@ -59,9 +62,8 @@ exports.patch_product_details = (req, res) => {
         .catch(err => {
             res.send(err)
         })
-
-
 }
+
 exports.delete_product = (req, res) => {
     const id = req.params.productId;
     Product.remove({ _id: id })

@@ -49,6 +49,9 @@ exports.user_signup = (req, res) => {
                 });
             }
         })
+        .catch(err=>{
+            res.send({"err":err.message})
+        })
 
 }
 exports.user_login = (req, res) => {
