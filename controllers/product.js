@@ -25,6 +25,7 @@ exports.get_single_product = (req, res) => {
 
 exports.create_product = async (req, res) => {
     console.log(req.file)
+    
     const product = new Product({
         name: req.body.name,
         price: req.body.price,

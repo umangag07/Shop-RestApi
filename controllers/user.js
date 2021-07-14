@@ -80,7 +80,7 @@ exports.user_login = (req, res) => {
                         },
                             process.env.JWT_KEY,
                             {
-                                expiresIn: "1m"
+                                expiresIn: "10m"
                             })
                         res.status(200).json({
                             message: "Auth success",

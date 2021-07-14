@@ -3,7 +3,7 @@ const router = express.Router();
 const UserController = require('../controllers/user')
 const checkAuth = require("../middleware/check-auth");
 
-router.get('/getMyAllUserJustForME', checkAuth, UserController.get_all_user)
+router.get('/get', checkAuth, UserController.get_all_user)
 
 router.post("/signup", UserController.user_signup);
 

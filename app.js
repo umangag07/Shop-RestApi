@@ -20,7 +20,7 @@ app.use('/user', UserRoute)
 
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(response=>{
-        console.log(response)
+        console.log("connected")
     })
     .catch(err=>{
         console.error(err)
