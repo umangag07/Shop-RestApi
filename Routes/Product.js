@@ -40,7 +40,10 @@ router.post('/', checkAuth, upload.single('productimage'), async (req, res) => {
     const params = {
         Bucket:process.env.AWS_BUCKET_NAME,
         Key:req.file.originalname,
-        Body:req.file.buffer
+        Body:req.file.buffer,
+        ACL:"public-read-write",
+        ContentType:"image/jpeg"
+        
     };
     s3.upload(params,(error,data)=>{
         if(error){
